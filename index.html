@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
+  <meta name="theme-color" content="#6D0D0D"/>
+  <title>गणेश उत्सव 2026 — थीम चयन</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Tiro+Devanagari+Hindi:ital@0;1&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --maroon:#7A1212;
+      --maroon-deep:#4A0808;
+      --gold:#E8B923;
+      --gold-soft:#F6D56B;
+      --saffron:#E07A00;
+      --cream:#FFF6E4;
+      --parchment:#FFF1D0;
+      --ink:#3A1A08;
+      --ink-mid:#6B3E1A;
+      --green:#1B6B3A;
+      --safe-top:env(safe-area-inset-top,0px);
+      --safe-bot:env(safe-area-inset-bottom,0px);
+    }
+    html,body{height:100%;}
+    body{
+      font-family:'Noto Sans Devanagari',sans-serif;
+      background:#3A0A0A;
+      color:var(--ink);
+      overflow:hidden;
+      -webkit-font-smoothing:antialiased;
+    }
+    .phone{
+      max-width:430px;margin:0 auto;height:100%;position:relative;
+      background:var(--cream);overflow:hidden;
+      box-shadow:0 0 0 8px #5A0E0E, 0 20px 60px rgba(0,0,0,.4);
+    }
+
+    /* festive bg */
+    .app-bg{
+      position:absolute;inset:0;z-index:0;pointer-events:none;
+      background:
+        radial-gradient(ellipse at 50% -10%,rgba(232,185,35,.28),transparent 50%),
+        radial-gradient(ellipse at 0% 80%,rgba(224,122,0,.12),transparent 40%),
+        radial-gradient(ellipse at 100% 90%,rgba(122,18,18,.1),transparent 40%),
+        repeating-linear-gradient(90deg,transparent 0 46px,rgba(232,185,35,.06) 46px 48px),
+        linear-gradient(180deg,#FFF8EA 0%,#FFE9C2 55%,#FFF3D6 100%);
+    }
+    .app-bg::before,.app-bg::after{
+      content:'';position:absolute;left:0;right:0;height:18px;
+      background:repeating-linear-gradient(90deg,
+        #E07A00 0 12px,#E8B923 12px 24px,#7A1212 24px 36px,#1B6B3A 36px 48px,#E8B923 48px 60px);
+    }
+    .app-bg::before{top:0}
+    .app-bg::after{bottom:0}
+
+    .screen{
+      position:absolute;inset:0;z-index:1;
+      display:none;flex-direction:column;
+      padding-top:calc(18px + var(--safe-top));
+      padding-bottom:calc(18px + var(--safe-bot));
+    }
+    .screen.show{display:flex}
+
+    .topbar{
+      padding:10px 16px 8px;
+      text-align:center;
+      flex-shrink:0;
+    }
+    .om-row{font-size:18px;letter-spacing:8px;opacity:.75;margin-bottom:2px}
+    .brand{
+      font-family:'Tiro Devanagari Hindi',serif;
+      font-size:clamp(20px,5.6vw,26px);
+      color:var(--maroon);
+      line-height:1.25;
+      text-shadow:0 1px 0 #fff;
+    }
+    .brand span{display:block;font-size:.72em;color:#8B1A1A}
+    .tag{
+      margin-top:6px;display:inline-block;
+      background:linear-gradient(135deg,#7A1212,#A31C1C);
+      color:var(--gold-soft);
+      font-size:11px;font-weight:800;
+      padding:5px 14px;border-radius:999px;
+      border:1px solid var(--gold);
+      letter-spacing:.4px;
+    }
+
+    .hint{
+      text-align:center;
+      font-size:13px;font-weight:700;
+      color:var(--ink-mid);
+      padding:8px 18px 10px;
+    }
+
+    .scroll{
+      flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
+      padding:0 14px 28px;
+    }
+
+    /* GROUP CARDS */
+    .group-list{display:flex;flex-direction:column;gap:12px}
+    .group-card{
+      background:linear-gradient(180deg,#fffdf6,#fff5dc);
+      border:2px solid var(--gold);
+      border-radius:18px;
+      padding:14px 14px 12px;
+      box-shadow:0 8px 18px rgba(122,18,18,.08);
+      cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
+      position:relative;
+      overflow:hidden;
+    }
+    .group-card::after{
+      content:'';position:absolute;right:-18px;top:-18px;width:70px;height:70px;
+      background:radial-gradient(circle,rgba(232,185,35,.35),transparent 70%);
+    }
+    .group-card:active{transform:scale(.985)}
+    .gc-top{display:flex;align-items:center;gap:10px}
+    .gc-emoji{
+      width:44px;height:44px;border-radius:14px;flex-shrink:0;
+      display:grid;place-items:center;font-size:24px;
+      background:linear-gradient(135deg,#7A1212,#C43A1A);
+      border:1.5px solid var(--gold);
+    }
+    .gc-name{
+      font-family:'Tiro Devanagari Hindi',serif;
+      font-size:18px;color:var(--maroon);line-height:1.2;
+    }
+    .gc-members{
+      margin-top:8px;
+      font-size:12px;line-height:1.6;
+      color:var(--ink-mid);
+      background:rgba(122,18,18,.04);
+      border-radius:12px;
+      padding:8px 10px;
+      text-align:left;
+    }
+    .gc-members div{padding:1px 0}
+    .gc-badge{
+      position:absolute;top:12px;right:12px;
+      font-size:10px;font-weight:800;
+      padding:3px 8px;border-radius:999px;
+    }
+    .gc-badge.pending{background:#FFF3CD;color:#9A5B00;border:1px solid #E8B923}
+    .gc-badge.done{background:#E7F6EC;color:#1B6B3A;border:1px solid #7BC89A}
+
+    /* THEME GRID */
+    .mini-bar{
+      display:flex;align-items:center;gap:8px;
+      padding:0 16px 10px;
+    }
+    .back-btn,.chip-btn{
+      border:none;font-family:inherit;cursor:pointer;
+      font-weight:800;font-size:12px;
+      padding:8px 12px;border-radius:999px;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .back-btn{background:#fff;border:1.5px solid var(--gold);color:var(--maroon)}
+    .chip-btn{background:linear-gradient(135deg,#7A1212,#A31C1C);color:var(--gold-soft);border:1px solid var(--gold)}
+    .you-are{
+      flex:1;min-width:0;
+      font-size:12px;font-weight:800;color:var(--maroon);
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    }
+
+    .themes-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .theme-card{
+      min-height:118px;border-radius:16px;padding:12px;
+      border:2px solid transparent;cursor:pointer;
+      display:flex;flex-direction:column;justify-content:space-between;
+      -webkit-tap-highlight-color:transparent;
+      position:relative;
+    }
+    .theme-card:active{transform:scale(.97)}
+    .theme-card.c1{background:linear-gradient(160deg,#FFF3E0,#FFE082);border-color:#F9A825}
+    .theme-card.c2{background:linear-gradient(160deg,#FCE4EC,#F8BBD9);border-color:#C2185B}
+    .theme-card.c3{background:linear-gradient(160deg,#E8F5E9,#C8E6C9);border-color:#2E7D32}
+    .theme-card.c4{background:linear-gradient(160deg,#E3F2FD,#BBDEFB);border-color:#1565C0}
+    .theme-card.c5{background:linear-gradient(160deg,#F3E5F5,#E1BEE7);border-color:#7B1FA2}
+    .theme-card.c6{background:linear-gradient(160deg,#FFF8E1,#FFCC80);border-color:#EF6C00}
+    .theme-card.c7{background:linear-gradient(160deg,#E0F7FA,#80DEEA);border-color:#00838F}
+    .theme-card.taken{filter:grayscale(.25);opacity:.72;cursor:default}
+    .t-emoji{font-size:28px}
+    .t-hi{font-size:13px;font-weight:900;line-height:1.25}
+    .t-en{font-size:10px;font-weight:600;opacity:.75;font-family:Poppins,sans-serif;margin-top:2px}
+    .taken-tag{
+      margin-top:6px;font-size:10px;font-weight:800;color:#1B6B3A;
+      background:rgba(255,255,255,.7);border-radius:8px;padding:4px 6px;
+    }
+
+    /* STATUS */
+    .status-card{
+      background:linear-gradient(180deg,#fffdf8,#fff4d8);
+      border:2px solid var(--gold);
+      border-radius:16px;padding:12px;
+      margin-bottom:10px;
+    }
+    .status-card.mine{border-color:#1B6B3A;box-shadow:0 0 0 3px rgba(27,107,58,.12)}
+    .sc-head{display:flex;align-items:flex-start;gap:8px}
+    .sc-emoji{font-size:22px}
+    .sc-name{font-family:'Tiro Devanagari Hindi',serif;font-size:16px;color:var(--maroon)}
+    .sc-members{font-size:11px;color:var(--ink-mid);margin-top:3px;line-height:1.45}
+    .sc-theme{
+      margin-top:8px;padding:8px 10px;border-radius:12px;
+      font-size:13px;font-weight:800;
+    }
+    .sc-theme.yes{background:#E7F6EC;color:#14532D}
+    .sc-theme.no{background:#FFF3CD;color:#9A5B00}
+
+    .your-pick{
+      margin:0 14px 10px;
+      background:linear-gradient(135deg,#14532D,#1B6B3A);
+      color:#fff;border-radius:16px;padding:12px 14px;
+      border:2px solid #86EFAC;
+      display:none;
+    }
+    .your-pick.show{display:block}
+    .your-pick small{opacity:.8;font-size:10px;font-weight:700;letter-spacing:.8px}
+    .your-pick strong{display:block;font-size:16px;margin-top:2px}
+
+    /* SHEET */
+    .overlay{
+      display:none;position:absolute;inset:0;z-index:50;
+      background:rgba(58,26,8,.45);backdrop-filter:blur(4px);
+      align-items:flex-end;justify-content:center;
+    }
+    .overlay.show{display:flex}
+    .sheet{
+      width:100%;max-width:480px;
+      background:linear-gradient(180deg,#FFFDF6,#FFE9B8);
+      border-radius:22px 22px 0 0;
+      padding:8px 18px calc(22px + var(--safe-bot));
+      border-top:3px solid var(--gold);
+      animation:up .28s ease;
+    }
+    @keyframes up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+    .handle{width:42px;height:5px;background:#E0C27A;border-radius:99px;margin:6px auto 10px}
+    .sheet h3{text-align:center;font-family:'Tiro Devanagari Hindi',serif;color:var(--maroon);font-size:22px}
+    .sheet p.sub{text-align:center;font-size:12px;color:var(--ink-mid);margin:4px 0 12px}
+    .preview{
+      display:flex;gap:10px;align-items:center;
+      background:#fff;border:1.5px solid var(--gold);border-radius:14px;padding:10px;
+      margin-bottom:12px;
+    }
+    .preview .big{font-size:32px}
+    label{display:block;font-size:12px;font-weight:800;margin:8px 0 5px}
+    input{
+      width:100%;padding:12px 14px;border-radius:12px;border:2px solid #E8B923;
+      font:inherit;font-size:15px;outline:none;background:#fff;
+    }
+    .row{display:flex;gap:8px;margin-top:14px}
+    .btn-ghost,.btn-gold{
+      padding:13px;border-radius:12px;border:none;font:inherit;font-weight:800;cursor:pointer;
+    }
+    .btn-ghost{background:#fff;color:#7A1212;border:1.5px solid #E8B923}
+    .btn-gold{flex:1;background:linear-gradient(135deg,#E07A00,#C43A1A);color:#fff;box-shadow:0 6px 14px rgba(196,58,26,.28)}
+
+    .toast{
+      position:absolute;left:50%;bottom:calc(28px + var(--safe-bot));
+      transform:translateX(-50%) translateY(12px);
+      background:#1B6B3A;color:#fff;padding:10px 16px;border-radius:999px;
+      font-size:13px;font-weight:800;opacity:0;z-index:80;max-width:90vw;
+      transition:.25s;
+    }
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .toast.err{background:#7A1212}
+
+    .footer-mantra{
+      text-align:center;font-size:12px;font-weight:800;
+      color:var(--maroon);padding:10px 0 6px;flex-shrink:0;
+      background:linear-gradient(180deg,transparent,rgba(255,246,228,.95) 30%);
+    }
+    .diya-row{font-size:16px;letter-spacing:6px;margin-bottom:4px;opacity:.85}
+
+    @media (max-width:480px){
+      body{background:var(--cream)}
+      .phone{box-shadow:none;max-width:100%}
+    }
+  </style>
+</head>
+<body>
+<div class="phone">
+<div class="app-bg"></div>
+
+<!-- GROUP SELECT -->
+<section class="screen show" id="screen-groups">
+  <div class="topbar">
+    <div class="om-row">🪔 ॐ 🪔</div>
+    <div class="brand">वनश्री एवं साई मंगल<span>गणेश उत्सव 2026</span></div>
+    <div class="diya-row">🐘 🌸 🐘</div>
+    <div class="tag">🪔 थीम चयन 🪔</div>
+  </div>
+  <div class="hint">अपना ग्रुप चुनें — आपको पहले से पता है आप किस ग्रुप में हैं</div>
+  <div class="scroll">
+    <div class="group-list" id="group-list"></div>
+  </div>
+  <div class="footer-mantra">🙏 गणपति बप्पा मोरया! 🙏</div>
+</section>
+
+<!-- THEME PICK -->
+<section class="screen" id="screen-themes">
+  <div class="topbar" style="padding-bottom:0">
+    <div class="brand" style="font-size:20px">थीम चुनें</div>
+  </div>
+  <div class="mini-bar">
+    <button class="back-btn" onclick="goGroups()">← ग्रुप</button>
+    <div class="you-are" id="theme-you"></div>
+  </div>
+  <div class="hint" style="padding-top:0">एक थीम टैप करें। ली गई थीम लॉक हैं।</div>
+  <div class="scroll">
+    <div class="themes-grid" id="themes-grid"></div>
+  </div>
+</section>
+
+<!-- STATUS -->
+<section class="screen" id="screen-status">
+  <div class="topbar" style="padding-bottom:0">
+    <div class="brand" style="font-size:20px">थीम स्थिति</div>
+  </div>
+  <div class="mini-bar">
+    <button class="back-btn" onclick="goGroups()">← ग्रुप</button>
+    <div class="you-are" id="status-you"></div>
+  </div>
+  <div class="your-pick" id="your-pick">
+    <small>आपके ग्रुप की थीम</small>
+    <strong id="your-pick-name"></strong>
+  </div>
+  <div class="hint" style="padding-top:0">किसने थीम चुनी, कौन बाकी है</div>
+  <div class="scroll" id="status-list"></div>
+</section>
+
+<!-- CLAIM -->
+<div class="overlay" id="claim-overlay">
+  <div class="sheet">
+    <div class="handle"></div>
+    <div style="text-align:center;font-size:40px" id="claim-emoji">🎭</div>
+    <h3 id="claim-title">थीम</h3>
+    <p class="sub">अपने ग्रुप के लिए यह थीम लें</p>
+    <div class="preview">
+      <div class="big" id="claim-preview-emoji">🎭</div>
+      <div>
+        <div style="font-weight:900" id="claim-hi"></div>
+        <div style="font-size:11px;opacity:.7" id="claim-en"></div>
+      </div>
+    </div>
+    <div style="background:#fff;border:1.5px solid var(--gold);border-radius:12px;padding:10px 12px">
+      <div style="font-size:11px;font-weight:800;color:var(--ink-mid)">ग्रुप</div>
+      <div id="claim-group" style="font-weight:900;margin-top:2px"></div>
+    </div>
+    <label>आपका नाम</label>
+    <input id="claim-name" maxlength="50" placeholder="नाम लिखें..." autocomplete="off"/>
+    <div class="row">
+      <button class="btn-ghost" onclick="closeSheet()">रद्द</button>
+      <button class="btn-gold" onclick="confirmClaim()">🎉 थीम लें</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+</div>
+
+<script>
+const GROUPS = [
+  {id:'shiv', name:'शिव परिवार', emoji:'🔱',
+    members:'अतुल जी अग्रवाल एवं परिवार, आयुष जी अग्रवाल एवं परिवार, राजीव जी बाकड़ा एवं परिवार, मनोज जी (माधव मेडिकल) एवं परिवार, मनीष जी चौधरी एवं परिवार'},
+  {id:'riddhi', name:'रिद्धि परिवार', emoji:'🌺',
+    members:'राजेश जी अग्रवाल एवं परिवार, संदीप जी गर्ग एवं परिवार, राकेश जी मित्तल एवं परिवार, अनीस जी चौधरी एवं परिवार, धर्मेंद्र जी एरन एवं परिवार'},
+  {id:'siddhi', name:'सिद्धि परिवार', emoji:'✨',
+    members:'हर्ष जी अग्रवाल एवं परिवार, प्रकाश जी अग्रवाल एवं परिवार, बाल मुकुंद जी अग्रवाल एवं परिवार, कविता जी लखोटिया एवं परिवार, दीपक जी मंगल एवं परिवार, ब्रजेश जी भंसाली एवं परिवार'},
+  {id:'kartike', name:'कार्तिके परिवार', emoji:'🌟',
+    members:'प्रबल जी शर्मा एवं परिवार, अंकित जी गोयल एवं परिवार, मनाली जी अग्रवाल एवं परिवार, महेंद्र जी मानधान्या एवं परिवार, राजू जी अग्रवाल (अचार) एवं परिवार'},
+  {id:'mushak', name:'मूषक परिवार', emoji:'🐭',
+    members:'राजू जी मंगल एवं परिवार, अनुराग जी अग्रवाल एवं परिवार, कैलाशचंद जी शर्मा एवं परिवार, सुनील जी मित्तल एवं परिवार, पंकज जी गोयल एवं परिवार'},
+  {id:'mayur', name:'मयूर परिवार', emoji:'🦚',
+    members:'ललित जी खंडेलवाल एवं परिवार, आलोक जी अग्रवाल एवं परिवार, भरत जी एरन एवं परिवार, दीक्षित जी मैडम एवं परिवार, प्रसन्न जी मित्तल एवं परिवार, महेश जी सोनी एवं परिवार'},
+  {id:'nandi', name:'नंदी परिवार', emoji:'🐂',
+    members:'करण जी गोयल एवं परिवार, दिनेश जी बंसल एवं परिवार, अभिषेक जी हार्डिया एवं परिवार, कांवर जी एवं परिवार, आशीष जी बदरूका एवं परिवार'},
+  {id:'shubh', name:'शुभलाभ परिवार', emoji:'🌸',
+    members:'नवल जी अग्रवाल एवं परिवार, अनुकूल जी अग्रवाल एवं परिवार, राम नारायण जी गुप्ता एवं परिवार, दिलीप जी तोतला एवं परिवार, सोहन जी सेन एवं परिवार'},
+];
+
+const COLORS = ['c1','c2','c3','c4','c5','c6','c7'];
+const THEMES = [
+  {id:1,emoji:'🙏',hindi:'भिखारी',english:'Beggar'},
+  {id:2,emoji:'👮',hindi:'पुलिसकर्मी — चोर',english:'Police — Thief'},
+  {id:3,emoji:'🏥',hindi:'डॉक्टर / नर्स — मरीज',english:'Doctor / Nurse — Patient'},
+  {id:4,emoji:'🤡',hindi:'सर्कस का जोकर',english:'Circus Clown'},
+  {id:5,emoji:'🧹',hindi:'सफाईकर्मी',english:'Sanitation Worker'},
+  {id:6,emoji:'🪖',hindi:'सैनिक',english:'Soldier'},
+  {id:7,emoji:'⚖️',hindi:'वकील — जज — फरियादी',english:'Lawyer — Judge — Complainant'},
+  {id:8,emoji:'📚',hindi:'विद्यार्थी — शिक्षक',english:'Student — Teacher'},
+  {id:9,emoji:'🚌',hindi:'ड्राइवर — यात्री',english:'Driver — Passenger'},
+  {id:10,emoji:'🌾',hindi:'किसान',english:'Farmer'},
+  {id:11,emoji:'📮',hindi:'डाकिया',english:'Postman'},
+  {id:12,emoji:'🚒',hindi:'फायर ब्रिगेड कर्मचारी',english:'Firefighter'},
+  {id:13,emoji:'🗡️',hindi:'डाकू',english:'Dacoit'},
+  {id:14,emoji:'🍬',hindi:'हलवाई / रसोइया',english:'Halwai / Cook'},
+  {id:15,emoji:'📸',hindi:'फोटोग्राफर',english:'Photographer'},
+  {id:16,emoji:'🛡️',hindi:'सुरक्षा कर्मी',english:'Security Guard'},
+  {id:17,emoji:'🏛️',hindi:'राजनेता / नेत्री',english:'Politician'},
+];
+
+const STORAGE_KEY = 'ganesh2026_v3';
+let currentGroup = null;
+let claimingThemeId = null;
+
+function getState(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}'); }catch{ return {}; } }
+function saveState(s){ localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); }
+function groupClaim(state, groupId){ return Object.entries(state).find(([,v]) => v.groupId === groupId); }
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.toggle('show', s.id === id));
+}
+
+function renderGroups(){
+  const state = getState();
+  document.getElementById('group-list').innerHTML = GROUPS.map(g => {
+    const taken = groupClaim(state, g.id);
+    const theme = taken ? THEMES.find(t => t.id == taken[0]) : null;
+    return `<button class="group-card" onclick="selectGroup('${g.id}')">
+      <span class="gc-badge ${taken?'done':'pending'}">${taken ? '✅ थीम ली' : '⏳ बाकी'}</span>
+      <div class="gc-top">
+        <div class="gc-emoji">${g.emoji}</div>
+        <div class="gc-name">${g.name}</div>
+      </div>
+      <div class="gc-members">${g.members.split(', ').map(m=>`<div>${m}</div>`).join('')}</div>
+      ${taken ? `<div class="taken-tag" style="margin-top:8px">थीम: ${theme?.emoji||''} ${theme?.hindi||''}</div>` : ''}
+    </button>`;
+  }).join('');
+}
+
+function selectGroup(id){
+  const g = GROUPS.find(x => x.id === id);
+  if(!g) return;
+  currentGroup = g;
+  const taken = groupClaim(getState(), g.id);
+  if(taken) openStatus();
+  else openThemes();
+}
+
+function goGroups(){
+  currentGroup = null;
+  renderGroups();
+  showScreen('screen-groups');
+}
+
+function openThemes(){
+  document.getElementById('theme-you').textContent = `${currentGroup.emoji} ${currentGroup.name}`;
+  renderThemes();
+  showScreen('screen-themes');
+}
+
+function renderThemes(){
+  const state = getState();
+  document.getElementById('themes-grid').innerHTML = THEMES.map((t,i) => {
+    const cl = state[t.id];
+    const col = COLORS[i % COLORS.length];
+    return `<div class="theme-card ${col} ${cl?'taken':''}" onclick="${cl?'':'handleCardClick('+t.id+')'}">
+      <div class="t-emoji">${t.emoji}</div>
+      <div>
+        <div class="t-hi">${t.hindi}</div>
+        <div class="t-en">${t.english}</div>
+        ${cl ? `<div class="taken-tag">🔒 ${cl.group}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function handleCardClick(themeId){
+  const state = getState();
+  if(groupClaim(state, currentGroup.id)){
+    toast('आपके ग्रुप ने पहले से थीम ले ली है');
+    openStatus();
+    return;
+  }
+  if(state[themeId]){ toast('यह थीम पहले से ली जा चुकी है', true); return; }
+  const t = THEMES.find(x => x.id === themeId);
+  claimingThemeId = themeId;
+  document.getElementById('claim-emoji').textContent = t.emoji;
+  document.getElementById('claim-title').textContent = t.hindi;
+  document.getElementById('claim-preview-emoji').textContent = t.emoji;
+  document.getElementById('claim-hi').textContent = t.hindi;
+  document.getElementById('claim-en').textContent = t.english;
+  document.getElementById('claim-group').textContent = `${currentGroup.emoji} ${currentGroup.name}`;
+  document.getElementById('claim-name').value = '';
+  document.getElementById('claim-overlay').classList.add('show');
+  setTimeout(() => document.getElementById('claim-name').focus(), 280);
+}
+
+function confirmClaim(){
+  const name = document.getElementById('claim-name').value.trim();
+  if(!name){ toast('कृपया अपना नाम लिखें', true); return; }
+  const state = getState();
+  if(state[claimingThemeId]){ toast('यह थीम पहले से ली जा चुकी है', true); closeSheet(); return; }
+  if(groupClaim(state, currentGroup.id)){ toast('आपके ग्रुप ने पहले से थीम ली है'); closeSheet(); openStatus(); return; }
+  state[claimingThemeId] = { by:name, group:currentGroup.name, groupId:currentGroup.id, ts:Date.now() };
+  saveState(state);
+  closeSheet();
+  toast(`🎉 ${currentGroup.name} ने थीम ले ली!`);
+  openStatus();
+}
+
+function closeSheet(){ document.getElementById('claim-overlay').classList.remove('show'); }
+
+function openStatus(){
+  const state = getState();
+  document.getElementById('status-you').textContent = `${currentGroup.emoji} ${currentGroup.name}`;
+  const mine = groupClaim(state, currentGroup.id);
+  const yp = document.getElementById('your-pick');
+  if(mine){
+    const th = THEMES.find(t => t.id == mine[0]);
+    yp.classList.add('show');
+    document.getElementById('your-pick-name').textContent = `${th?.emoji||''} ${th?.hindi||''} — ${mine[1].by}`;
+  } else yp.classList.remove('show');
+
+  document.getElementById('status-list').innerHTML = GROUPS.map(g => {
+    const entry = groupClaim(state, g.id);
+    const theme = entry ? THEMES.find(t => t.id == entry[0]) : null;
+    const isMe = g.id === currentGroup.id;
+    return `<div class="status-card ${isMe?'mine':''}">
+      <div class="sc-head">
+        <div class="sc-emoji">${g.emoji}</div>
+        <div>
+          <div class="sc-name">${g.name}${isMe?' · आप':''}</div>
+          <div class="sc-members">${g.members}</div>
+        </div>
+      </div>
+      ${entry
+        ? `<div class="sc-theme yes">✅ ${theme?.emoji||''} ${theme?.hindi} — ${entry[1].by}</div>`
+        : `<div class="sc-theme no">⏳ थीम अभी नहीं चुनी</div>`}
+    </div>`;
+  }).join('');
+  showScreen('screen-status');
+}
+
+let tT;
+function toast(msg, err){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (err?' err':'');
+  void t.offsetWidth; t.classList.add('show');
+  clearTimeout(tT); tT = setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+document.getElementById('claim-overlay').addEventListener('click', e => {
+  if(e.target.id === 'claim-overlay') closeSheet();
+});
+
+renderGroups();
+</script>
+</body>
+</html>
