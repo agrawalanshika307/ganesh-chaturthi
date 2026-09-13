@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&family=Tiro+Devanagari+Hindi:ital@0;1&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     :root{
@@ -363,6 +365,22 @@
 </div>
 
 <script>
+// Firebase Configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyACltOD8bhg8yG8LTlybXB3mgtBph8M7J8",
+  authDomain: "ganesh-chaturthi-2026-b303c.firebaseapp.com",
+  projectId: "ganesh-chaturthi-2026-b303c",
+  storageBucket: "ganesh-chaturthi-2026-b303c.firebasestorage.app",
+  messagingSenderId: "76093532422",
+  appId: "1:76093532422:web:4c9b78ee3d3550784f9687",
+  measurementId: "G-HSJK1MQYLB"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+const themesRef = database.ref('themes');
+
 const GROUPS = [
   {id:'shiv', name:'शिव परिवार', emoji:'🔱',
     members:'अतुल जी अग्रवाल एवं परिवार, आयुष जी अग्रवाल एवं परिवार, राजीव जी बाकड़ा एवं परिवार, मनोज जी (माधव मेडिकल) एवं परिवार, मनीष जी चौधरी एवं परिवार'},
@@ -403,12 +421,22 @@ const THEMES = [
   {id:17,emoji:'🏛️',hindi:'राजनेता / नेत्री',english:'Politician'},
 ];
 
-const STORAGE_KEY = 'ganesh2026_v3';
 let currentGroup = null;
 let claimingThemeId = null;
+let currentState = {};
 
-function getState(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}'); }catch{ return {}; } }
-function saveState(s){ localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); }
+// Real-time data listener
+themesRef.on('value', (snapshot) => {
+  currentState = snapshot.val() || {};
+  // Re-render current screen if data changes
+  const currentScreen = document.querySelector('.screen.show');
+  if(currentScreen) {
+    if(currentScreen.id === 'screen-groups') renderGroups();
+    if(currentScreen.id === 'screen-themes') renderThemes();
+    if(currentScreen.id === 'screen-status') openStatus();
+  }
+});
+
 function groupClaim(state, groupId){ return Object.entries(state).find(([,v]) => v.groupId === groupId); }
 
 function showScreen(id){
@@ -416,9 +444,8 @@ function showScreen(id){
 }
 
 function renderGroups(){
-  const state = getState();
   document.getElementById('group-list').innerHTML = GROUPS.map(g => {
-    const taken = groupClaim(state, g.id);
+    const taken = groupClaim(currentState, g.id);
     const theme = taken ? THEMES.find(t => t.id == taken[0]) : null;
     return `<button class="group-card" onclick="selectGroup('${g.id}')">
       <span class="gc-badge ${taken?'done':'pending'}">${taken ? '✅ थीम ली' : '⏳ बाकी'}</span>
@@ -436,7 +463,7 @@ function selectGroup(id){
   const g = GROUPS.find(x => x.id === id);
   if(!g) return;
   currentGroup = g;
-  const taken = groupClaim(getState(), g.id);
+  const taken = groupClaim(currentState, g.id);
   if(taken) openStatus();
   else openThemes();
 }
@@ -454,9 +481,8 @@ function openThemes(){
 }
 
 function renderThemes(){
-  const state = getState();
   document.getElementById('themes-grid').innerHTML = THEMES.map((t,i) => {
-    const cl = state[t.id];
+    const cl = currentState[t.id];
     const col = COLORS[i % COLORS.length];
     return `<div class="theme-card ${col} ${cl?'taken':''}" onclick="${cl?'':'handleCardClick('+t.id+')'}">
       <div class="t-emoji">${t.emoji}</div>
@@ -470,13 +496,12 @@ function renderThemes(){
 }
 
 function handleCardClick(themeId){
-  const state = getState();
-  if(groupClaim(state, currentGroup.id)){
+  if(groupClaim(currentState, currentGroup.id)){
     toast('आपके ग्रुप ने पहले से थीम ले ली है');
     openStatus();
     return;
   }
-  if(state[themeId]){ toast('यह थीम पहले से ली जा चुकी है', true); return; }
+  if(currentState[themeId]){ toast('यह थीम पहले से ली जा चुकी है', true); return; }
   const t = THEMES.find(x => x.id === themeId);
   claimingThemeId = themeId;
   document.getElementById('claim-emoji').textContent = t.emoji;
@@ -493,11 +518,17 @@ function handleCardClick(themeId){
 function confirmClaim(){
   const name = document.getElementById('claim-name').value.trim();
   if(!name){ toast('कृपया अपना नाम लिखें', true); return; }
-  const state = getState();
-  if(state[claimingThemeId]){ toast('यह थीम पहले से ली जा चुकी है', true); closeSheet(); return; }
-  if(groupClaim(state, currentGroup.id)){ toast('आपके ग्रुप ने पहले से थीम ली है'); closeSheet(); openStatus(); return; }
-  state[claimingThemeId] = { by:name, group:currentGroup.name, groupId:currentGroup.id, ts:Date.now() };
-  saveState(state);
+  if(currentState[claimingThemeId]){ toast('यह थीम पहले से ली जा चुकी है', true); closeSheet(); return; }
+  if(groupClaim(currentState, currentGroup.id)){ toast('आपके ग्रुप ने पहले से थीम ली है'); closeSheet(); openStatus(); return; }
+  
+  // Save to Firebase
+  themesRef.child(claimingThemeId).set({
+    by: name,
+    group: currentGroup.name,
+    groupId: currentGroup.id,
+    ts: Date.now()
+  });
+  
   closeSheet();
   toast(`🎉 ${currentGroup.name} ने थीम ले ली!`);
   openStatus();
@@ -506,9 +537,8 @@ function confirmClaim(){
 function closeSheet(){ document.getElementById('claim-overlay').classList.remove('show'); }
 
 function openStatus(){
-  const state = getState();
   document.getElementById('status-you').textContent = `${currentGroup.emoji} ${currentGroup.name}`;
-  const mine = groupClaim(state, currentGroup.id);
+  const mine = groupClaim(currentState, currentGroup.id);
   const yp = document.getElementById('your-pick');
   if(mine){
     const th = THEMES.find(t => t.id == mine[0]);
@@ -517,7 +547,7 @@ function openStatus(){
   } else yp.classList.remove('show');
 
   document.getElementById('status-list').innerHTML = GROUPS.map(g => {
-    const entry = groupClaim(state, g.id);
+    const entry = groupClaim(currentState, g.id);
     const theme = entry ? THEMES.find(t => t.id == entry[0]) : null;
     const isMe = g.id === currentGroup.id;
     return `<div class="status-card ${isMe?'mine':''}">
@@ -549,6 +579,7 @@ document.getElementById('claim-overlay').addEventListener('click', e => {
   if(e.target.id === 'claim-overlay') closeSheet();
 });
 
+// Initial render
 renderGroups();
 </script>
 </body>
