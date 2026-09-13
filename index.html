@@ -354,6 +354,8 @@
     </div>
     <label>आपका नाम</label>
     <input id="claim-name" maxlength="50" placeholder="नाम लिखें..." autocomplete="off"/>
+    <label>ग्रुप पासवर्ड</label>
+    <input id="claim-password" type="password" maxlength="30" placeholder="पासवर्ड डालें..." autocomplete="off"/>
     <div class="row">
       <button class="btn-ghost" onclick="closeSheet()">रद्द</button>
       <button class="btn-gold" onclick="confirmClaim()">🎉 थीम लें</button>
@@ -383,21 +385,21 @@ const database = firebase.database();
 const themesRef = database.ref('themes');
 
 const GROUPS = [
-  {id:'shiv', name:'शिव परिवार', emoji:'🔱',
+  {id:'shiv', name:'शिव परिवार', emoji:'🔱', password:'Parvati',
     members:'अतुल जी अग्रवाल एवं परिवार, आयुष जी अग्रवाल एवं परिवार, राजीव जी बाकड़ा एवं परिवार, मनोज जी (माधव मेडिकल) एवं परिवार, मनीष जी चौधरी एवं परिवार'},
-  {id:'riddhi', name:'रिद्धि परिवार', emoji:'🌺',
+  {id:'riddhi', name:'रिद्धि परिवार', emoji:'🌺', password:'Lakshmi',
     members:'राजेश जी अग्रवाल एवं परिवार, संदीप जी गर्ग एवं परिवार, राकेश जी मित्तल एवं परिवार, अनीस जी चौधरी एवं परिवार, धर्मेंद्र जी एरन एवं परिवार'},
-  {id:'siddhi', name:'सिद्धि परिवार', emoji:'✨',
+  {id:'siddhi', name:'सिद्धि परिवार', emoji:'✨', password:'Saraswati',
     members:'हर्ष जी अग्रवाल एवं परिवार, प्रकाश जी अग्रवाल एवं परिवार, बाल मुकुंद जी अग्रवाल एवं परिवार, कविता जी लखोटिया एवं परिवार, दीपक जी मंगल एवं परिवार, ब्रजेश जी भंसाली एवं परिवार'},
-  {id:'kartike', name:'कार्तिके परिवार', emoji:'🌟',
+  {id:'kartike', name:'कार्तिके परिवार', emoji:'🌟', password:'Durga',
     members:'प्रबल जी शर्मा एवं परिवार, अंकित जी गोयल एवं परिवार, मनाली जी अग्रवाल एवं परिवार, महेंद्र जी मानधान्या एवं परिवार, राजू जी अग्रवाल (अचार) एवं परिवार'},
-  {id:'mushak', name:'मूषक परिवार', emoji:'🐭',
+  {id:'mushak', name:'मूषक परिवार', emoji:'🐭', password:'Kali',
     members:'राजू जी मंगल एवं परिवार, अनुराग जी अग्रवाल एवं परिवार, कैलाशचंद जी शर्मा एवं परिवार, सुनील जी मित्तल एवं परिवार, पंकज जी गोयल एवं परिवार'},
-  {id:'mayur', name:'मयूर परिवार', emoji:'🦚',
+  {id:'mayur', name:'मयूर परिवार', emoji:'🦚', password:'Amba',
     members:'ललित जी खंडेलवाल एवं परिवार, आलोक जी अग्रवाल एवं परिवार, भरत जी एरन एवं परिवार, दीक्षित जी मैडम एवं परिवार, प्रसन्न जी मित्तल एवं परिवार, महेश जी सोनी एवं परिवार'},
-  {id:'nandi', name:'नंदी परिवार', emoji:'🐂',
+  {id:'nandi', name:'नंदी परिवार', emoji:'🐂', password:'Bhavani',
     members:'करण जी गोयल एवं परिवार, दिनेश जी बंसल एवं परिवार, अभिषेक जी हार्डिया एवं परिवार, कांवर जी एवं परिवार, आशीष जी बदरूका एवं परिवार'},
-  {id:'shubh', name:'शुभलाभ परिवार', emoji:'🌸',
+  {id:'shubh', name:'शुभलाभ परिवार', emoji:'🌸', password:'Gauri',
     members:'नवल जी अग्रवाल एवं परिवार, अनुकूल जी अग्रवाल एवं परिवार, राम नारायण जी गुप्ता एवं परिवार, दिलीप जी तोतला एवं परिवार, सोहन जी सेन एवं परिवार'},
 ];
 
@@ -512,13 +514,18 @@ function handleCardClick(themeId){
   document.getElementById('claim-en').textContent = t.english;
   document.getElementById('claim-group').textContent = `${currentGroup.emoji} ${currentGroup.name}`;
   document.getElementById('claim-name').value = '';
+  document.getElementById('claim-password').value = '';
   document.getElementById('claim-overlay').classList.add('show');
   setTimeout(() => document.getElementById('claim-name').focus(), 280);
 }
 
 function confirmClaim(){
   const name = document.getElementById('claim-name').value.trim();
+  const password = document.getElementById('claim-password').value.trim();
+  
   if(!name){ toast('कृपया अपना नाम लिखें', true); return; }
+  if(!password){ toast('कृपया ग्रुप पासवर्ड डालें', true); return; }
+  if(password !== currentGroup.password){ toast('गलत पासवर्ड! कृपया सही पासवर्ड डालें', true); return; }
   if(currentState[claimingThemeId]){ toast('यह थीम पहले से ली जा चुकी है', true); closeSheet(); return; }
   if(groupClaim(currentState, currentGroup.id)){ toast('आपके ग्रुप ने पहले से थीम ली है'); closeSheet(); openStatus(); return; }
   
@@ -535,7 +542,10 @@ function confirmClaim(){
   openStatus();
 }
 
-function closeSheet(){ document.getElementById('claim-overlay').classList.remove('show'); }
+function closeSheet(){ 
+  document.getElementById('claim-overlay').classList.remove('show');
+  document.getElementById('claim-password').value = '';
+}
 
 function openStatus(){
   document.getElementById('status-you').textContent = `${currentGroup.emoji} ${currentGroup.name}`;
